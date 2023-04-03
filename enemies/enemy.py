@@ -14,4 +14,7 @@ class Enemy:
         dx = ((player.position.x-self.x) * speed)/math.sqrt((player.position.x-self.x)**2 + (player.position.y-self.y)**2)
         dy = ((player.position.y-self.y) * speed)/math.sqrt((player.position.x-self.x)**2 + (player.position.y-self.y)**2)
 
-        print(dx, ", ", dy)
+        self.x += dx
+        self.y += dy
+
+        print(self.x, ", ", self.y, "e")
