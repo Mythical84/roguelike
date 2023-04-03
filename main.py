@@ -1,6 +1,9 @@
 import pygame
 import player
 import map
+from enemies import enemy
+
+# TODO: FIX ISSUES WITH WORLDSPACE COORDINATES
 
 pygame.init()
 screen = pygame.display.set_mode((1920, 1080))
@@ -9,19 +12,14 @@ running = True
 dt = 0
 
 
-player = player.Player()
-
-map = map.Map()
+map = map.MapGenerator()
 
 img = pygame.image.load("./knight_m_idle_anim_f0.png")
 img = pygame.transform.scale(img, (img.get_width() * 4, img.get_height() * 4))
 
-background = pygame.Surface((10000, 10000))
+player = player.Player(screen, img)
 
-background.fill("purple")
-
-map.draw_map("maps/Example Map_Floors.csv", background)
-map.draw_map("maps/Example Map_Walls.csv", background)
+enemies = [enemy.Enemy(img, 50, 50)]
 
 while running:
     for event in pygame.event.get():
@@ -31,13 +29,15 @@ while running:
     screen.fill("purple")
 
     player.move(dt)
-    screen.blit(background, (-player.position.x, -player.position.y))
+    enemies[0].move(dt, player)
+    screen.blit(map.floors, (-player.position.x, -player.position.y))
+    screen.blit(map.walls, (-player.position.x, -player.position.y))
 
-    screen.blit(img, (screen.get_width()/2, screen.get_height()/2))
+    screen.blit(enemies[0].sprite, (enemies[0].x - player.position.x, enemies[0].y - player.position.y))
+    screen.blit(img, (screen.get_width()/2 - img.get_width()/2, screen.get_height()/2 - img.get_height()/2))
 
     pygame.display.flip()
 
     dt = clock.tick(60) / 1000
-    print(f"FPS: {int(clock.get_fps())}")
 
 pygame.quit()

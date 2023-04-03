@@ -1,9 +1,9 @@
 import csv
 import pygame
+import os
+from enemies import enemy
 
-from tile import Tile
-
-class Map:
+class MapLoader:
     def __init__(self):
         self.maps = {}
         self.tiles = []
@@ -13,30 +13,47 @@ class Map:
             for width in range(0, self.tilesheet.get_width(), 64):
                 self.tiles.append(pygame.Rect(width, height, 64, 64))
 
+        for map in os.listdir("./maps"):
+            self.maps[map] = {}
+            for layer in os.listdir(f"./maps/{map}"):
+                self.load_layer(map, layer)
 
-        with open("maps/Example Map_Walls.csv") as f:
-            reader = csv.reader(f)
-            self.example_walls = []
-            for r in reader:
-                self.example_walls.append(r)
 
-    def load_map(self, map):
-        print("map loaded")
-        with open(map) as f:
+    def load_layer(self, map, layer):
+        with open(f"./maps/{map}/{layer}") as f:
             reader = csv.reader(f)
             m = []
             for r in reader:
                 m.append(r)
-
-            self.maps[map] = m
+            
+            # the string cutting is grabbing what type of layer the file is
+            # its cutting the file name so that only the layer type remains
+            self.maps[map][layer[len(map) + 1:][::-1][4:][::-1]] = m
 
     
-    def draw_map(self, map, screen): 
-        if map not in self.maps.keys():
-            self.load_map(map)
-        
-        for y in range(0, len(self.maps[map])):
-            for x in range(0, len(self.maps[map][y])):
+    def draw_map(self, map, floor, wall, enemies):
+        print(self.maps[map]["Floors"])
+        for y in range(0, len(self.maps[map]["Floors"])):
+            for x in range(0, len(self.maps[map]["Floors"][y])):
                 x_pos = (x * 64)
                 y_pos = (y * 64)
-                screen.blit(self.tilesheet, (x_pos, y_pos), self.tiles[int(self.maps[map][y][x])])
+                floor.blit(self.tilesheet, (x_pos, y_pos), self.tiles[int(self.maps[map]["Floors"][y][x])])
+                
+        for y in range(0, len(self.maps[map]["Walls"])):
+            for x in range(0, len(self.maps[map]["Walls"][y])):
+                x_pos = (x * 64)
+                y_pos = (y * 64)
+                wall.blit(self.tilesheet, (x_pos, y_pos), self.tiles[int(self.maps[map]["Walls"][y][x])])
+
+        # TODO: enemy loader
+
+class MapGenerator:
+    def __init__(self):
+        loader = MapLoader()
+        self.floors = pygame.Surface((10000, 10000))
+        self.walls = pygame.Surface((10000, 10000)).convert_alpha()
+        self.enemies = []
+
+        self.walls.fill([0, 0, 0, 0])
+
+        loader.draw_map("Example Map", self.floors, self.walls, self.enemies)
