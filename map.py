@@ -32,7 +32,6 @@ class MapLoader:
 
     
     def draw_map(self, map, floor, wall, enemies):
-        print(self.maps[map]["Floors"])
         for y in range(0, len(self.maps[map]["Floors"])):
             for x in range(0, len(self.maps[map]["Floors"][y])):
                 x_pos = (x * 64)
