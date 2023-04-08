@@ -1,4 +1,5 @@
 import pygame
+import math
 import player
 import map
 from enemies import enemy
@@ -27,16 +28,17 @@ while running:
     screen.fill("purple")
 
     player.move(dt)
-    enemies[0].move(dt, player)
+    for enemy in enemies:
+        enemy.move(dt, player)
     screen.blit(map.floors, (player.offset.x, player.offset.y))
     screen.blit(map.walls, (player.offset.x, player.offset.y))
 
-    pygame.draw.rect(screen, "red", enemies[0].hitbox, width=5)
-    screen.blit(enemies[0].sprite, (enemies[0].x + player.offset.x - player.sprite.get_width()/2, enemies[0].y + player.offset.y - player.sprite.get_height()/2))
-    pygame.draw.rect(screen, "green", player.hitbox, width=5)
+    for enemy in enemies:
+        screen.blit(enemy.sprite, (enemy.x + player.offset.x - player.sprite.get_width()/2, enemy.y + player.offset.y - player.sprite.get_height()/2))
+
     screen.blit(player.sprite, (screen.get_width()/2 - player.sprite.get_width()/2, screen.get_height()/2 - player.sprite.get_height()/2))
 
-    player.attack(screen)
+    enemies = player.attack(screen, enemies)
 
     pygame.display.flip()
 
