@@ -16,6 +16,7 @@ class Animator:
 
     def set_animation(self, name):
         self.current_animation = self.animations[name]
+        self.current_frame = 0
 
     def get_animation(self):
         return self.current_animation.get("name", None)

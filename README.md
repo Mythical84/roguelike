@@ -7,8 +7,8 @@ A very basic roguelike game
 
 - [x] art
 - [ ] random room placement
-- [ ] combat system
-- [ ] wall collisions
+- [x] combat system
+- [x] wall collisions
 - [x] animations
 
 ### Optional Additions

@@ -28,7 +28,7 @@ while running:
 
     screen.fill("purple")
 
-    player.move(dt)
+    player.move(dt, map.walls)
     for enemy in enemies:
         enemy.move(dt, player)
         enemy.attack(player)

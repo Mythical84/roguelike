@@ -22,14 +22,28 @@ class OrcWarrior(Enemy):
                 pygame.image.load("./sprites/enemies/orc_warrior/attack_3.png")
                 ]
         self.animator.add_animation(attack_sprites, 10, "attack")
+        self.attack_timer = -1
 
     def attack(self, player):
         distance = math.sqrt((player.position.y - self.y)**2 + (player.position.x - self.x)**2)
+        if distance <= 100:
+            if self.attack_timer == -1:
+                self.attack_timer = pygame.time.get_ticks() + 2000
+                self.animator.set_animation("attack")
+            if pygame.time.get_ticks() > self.attack_timer:
+                player.health -= 1
+                self.attack_timer = -1
+        else:
+            self.attack_timer = -1
 
     def move(self, dt, player):
+        if self.animator.get_animation() == "attack" and self.animator.current_frame < 3:
+            return
         super().move(dt, player)
         # TODO: prevent enemy from getting stuck on idle frame when transition
         # from idle to moving
+
+        # TODO: prevent enemy healthbar from sticking to player
         if self.moving:
             if self.animator.get_animation() != "walk":
                 self.animator.set_animation("walk")
