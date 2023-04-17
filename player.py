@@ -73,8 +73,10 @@ class Player:
         self.position.x -= x * 300 * dt
         self.position.y -= y * 300 * dt
 
-        # TODO: Fix jank hitboxes
         # TODO: Allow player to slide along walls
+        # TODO: Fix door corner clip glitch
+        
+        '''
 
         if walls.get_at((int(self.position.x - self.sprite.get_width()/2), int(self.position.y - self.sprite.get_height()/2)))[3] == 255:
             self.offset.x -= x * 300 * dt
@@ -88,6 +90,8 @@ class Player:
 
             self.position.x += x * 300 * dt
             self.position.y += y * 300 * dt
+
+        '''
 
     def attack(self, screen, enemies) -> (list[Enemy]):
         mouse = pygame.mouse.get_pressed()

@@ -11,7 +11,7 @@ running = True
 dt = 0
 
 
-map = map.MapGenerator()
+map = map.MapDrawer()
 
 img = pygame.image.load("./knight_m_idle_anim_f0.png")
 img = pygame.transform.scale(img, (img.get_width() * 4, img.get_height() * 4))
