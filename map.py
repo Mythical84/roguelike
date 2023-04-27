@@ -2,6 +2,7 @@ import csv
 import pygame
 import os
 import random
+import json
 
 class MapLoader:
     def __init__(self):
@@ -16,8 +17,16 @@ class MapLoader:
         for map in os.listdir("./maps"):
             self.maps[map] = {}
             for layer in os.listdir(f"./maps/{map}"):
-                self.load_layer(map, layer)
-
+                filename, extension = os.path.splitext(layer)
+                if extension == ".csv":
+                    self.load_layer(map, layer)
+                else:
+                    with open(f"./maps/{map}/map_data.json") as f:
+                        text = ""
+                        for line in f.readlines():
+                            text += line.strip()
+                        print(text)
+                        self.maps[map]["map_data"] = json.loads(text)
 
     def load_layer(self, map, layer):
         with open(f"./maps/{map}/{layer}") as f:
@@ -31,7 +40,8 @@ class MapLoader:
             self.maps[map][layer[len(map) + 1:][::-1][4:][::-1]] = m
 
     
-    def draw_map(self, map, floor, wall, enemies, x_offset, y_offset):
+    def draw_map(self, map, floor, wall, enemies, x_offset, y_offset, nearby_rooms):
+        print(nearby_rooms)
         for y in range(0, len(self.maps[map]["Floors"])):
             for x in range(0, len(self.maps[map]["Floors"][y])):
                 x_pos = (x * 64) + x_offset
@@ -41,7 +51,19 @@ class MapLoader:
         for y in range(0, len(self.maps[map]["Walls"])):
             for x in range(0, len(self.maps[map]["Walls"][y])):
                 x_pos = (x * 64) + x_offset
-                y_pos = (y * 64) + y_offset
+                y_pos = (y * 64) + y_offset - 64
+                if (y == 0 or y == 1) and (x == 14 or x == 15 or x == 16 or x == 17) and nearby_rooms[0]:
+                    continue
+                if (y == len(self.maps[map]["Walls"]) - 1 or y == len(self.maps[map]["Walls"]) - 2) and (x == 14 or x == 15 or x == 16 or x == 17) and nearby_rooms[3]:
+                    continue
+                if (x == 0 or x == 1) and (y == 9 or y == 10 or y == 11 or y == 12) and nearby_rooms[1]:
+                    continue
+                if (x == len(self.maps[map]["Walls"][y]) - 1 or x == len(self.maps[map]["Walls"][y]) - 2) and (y == 9 or y == 10 or y == 11 or y == 12) and nearby_rooms[2]:
+                    continue
+
+                # Stop the top tan part of the wall from drawing if there is a room above, making a more seemless transition between rooms
+                if y == 0 and nearby_rooms[0]:
+                    continue
                 wall.blit(self.tilesheet, (x_pos, y_pos), self.tiles[int(self.maps[map]["Walls"][y][x])])
 
         # TODO: enemy loader
@@ -56,14 +78,25 @@ class MapDrawer:
 
         self.walls.fill([0, 0, 0, 0])
 
+        current_map = "Example Map"
+
         y_offset = 0
         for i in range(0, 25):
-            x_offset = (i%5) * 30 * 64
+            data = loader.maps[current_map]["map_data"]
+            x_offset = (i%5) * data["width"] * 64
             if (i+1)%5 == 1 and i != 0:
-                y_offset += 20 * 64
+                y_offset += data["height"] * 64
             if generator.map[i] != 0:
-                loader.draw_map("Example Map", self.floors, self.walls, self.enemies, x_offset, y_offset)
-
+                # up, left, right, down
+                nearby_rooms = [False, False, False, False]
+                rooms = [-5, -1, 1, 5]
+                for r in rooms:
+                    try: 
+                        if generator.map[i+r] != 0:
+                            nearby_rooms[rooms.index(r)] = True
+                    except:
+                        pass
+                loader.draw_map(current_map, self.floors, self.walls, self.enemies, x_offset, y_offset, nearby_rooms)
 
 
 class MapGenerator:

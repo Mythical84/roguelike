@@ -1,5 +1,4 @@
 import pygame
-import math
 import player
 import map
 from enemies import orc_warrior
@@ -9,7 +8,6 @@ screen = pygame.display.set_mode((1920, 1080))
 clock = pygame.time.Clock()
 running = True
 dt = 0
-
 
 map = map.MapDrawer()
 
