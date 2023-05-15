@@ -4,7 +4,7 @@ import math
 
 class OrcWarrior(Enemy):
     def __init__(self, x, y):
-        image = pygame.image.load("./knight_m_idle_anim_f0.png")
+        image = pygame.image.load("./sprites/enemies/orc_warrior/walk_0.png")
         image = pygame.transform.scale(image, (image.get_width() * 4, image.get_height() * 4))
         super().__init__(image, x, y, 5)
         walk_sprites = [
@@ -36,16 +36,15 @@ class OrcWarrior(Enemy):
         else:
             self.attack_timer = -1
 
-    def move(self, dt, player):
+    def move(self, dt, player, walls):
+        # TODO: Make attacks sinc up properly with the animation
         if self.animator.get_animation() == "attack" and self.animator.current_frame < 3:
             self.healthbar.x = self.x - self.sprite.get_width()/2 + player.offset.x
             self.healthbar.y = self.y - self.sprite.get_height()/2 - 20 + player.offset.y
             return
-        super().move(dt, player)
+        super().move(dt, player, walls)
         # TODO: prevent enemy from getting stuck on idle frame when transition
         # from idle to moving
-
-        # TODO: prevent enemy healthbar from sticking to player
         if self.moving:
             if self.animator.get_animation() != "walk":
                 self.animator.set_animation("walk")

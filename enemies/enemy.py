@@ -18,9 +18,9 @@ class Enemy:
         self.dy = 0
         self.moving = False
 
-    def move(self, dt, player):
+    def move(self, dt, player, walls):
         distance = math.sqrt((player.position.y - self.y)**2 + (player.position.x - self.x)**2)
-        if distance > 100:
+        if distance > 100 and distance < 750:
             speed = 250
             # The next two equations are courtesy of https://mathworld.wolfram.com/Circle-LineIntersection.html
             # Although it has been edited to fit my use case. (Also specifically just the math, not any of the code)
@@ -29,7 +29,17 @@ class Enemy:
 
             self.x += self.dx * dt
             self.y += self.dy * dt
+
+            
+            if walls.get_at((int(self.x - self.sprite.get_width()/2), int(self.y - self.sprite.get_height()/2)))[3] == 255:
+                self.x -= self.dx * dt
+                self.y -= self.dy * dt
+            elif walls.get_at((int(self.x + self.sprite.get_width()/2), int(self.y + self.sprite.get_height()/2)))[3] == 255:
+                self.x -= self.dx * dt
+                self.y -= self.dy * dt
+
             self.moving = True
+
         else:
             self.moving = False
 

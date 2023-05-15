@@ -3,6 +3,7 @@ import pygame
 import os
 import random
 import json
+from enemies import orc_warrior
 
 class MapLoader:
     def __init__(self):
@@ -25,7 +26,6 @@ class MapLoader:
                         text = ""
                         for line in f.readlines():
                             text += line.strip()
-                        print(text)
                         self.maps[map]["map_data"] = json.loads(text)
 
     def load_layer(self, map, layer):
@@ -66,7 +66,15 @@ class MapLoader:
                     continue
                 wall.blit(self.tilesheet, (x_pos, y_pos), self.tiles[int(self.maps[map]["Walls"][y][x])])
 
-        # TODO: enemy loader
+        e = enemies
+        for y in range(0, len(self.maps[map]["Enemies"])):
+            for x in range(0, len(self.maps[map]["Enemies"][y])):
+                if self.maps[map]["Enemies"][y][x] == "439":
+                    x_pos = (x*64) + x_offset
+                    y_pos = (y*64) + y_offset
+                    e.append(orc_warrior.OrcWarrior(x_pos,y_pos))
+
+        return e
 
 class MapDrawer:
     def __init__(self):
@@ -96,7 +104,7 @@ class MapDrawer:
                             nearby_rooms[rooms.index(r)] = True
                     except:
                         pass
-                loader.draw_map(current_map, self.floors, self.walls, self.enemies, x_offset, y_offset, nearby_rooms)
+                self.enemies = loader.draw_map(current_map, self.floors, self.walls, self.enemies, x_offset+(5000 - (64 * 30 * 2)), y_offset+5000 - (64 * 18 * 2), nearby_rooms)
 
 
 class MapGenerator:
