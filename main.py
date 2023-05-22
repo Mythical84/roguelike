@@ -1,3 +1,9 @@
+# roguelike
+# Tyler Artinger
+# 5/19/23
+# A roguelike game
+# I pledge on my honor not to lie cheat steal plagiarize or vandalize
+
 import pygame
 import player
 import map
