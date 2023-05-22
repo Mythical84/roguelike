@@ -40,11 +40,8 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
-    if player.health <= 0:
+    if player.health <= 0 or len(enemies) == 0:
         screen.fill("black")
-        font = pygame.font.SysFont("Comic Sans", 100)
-        text = font.render("Game Over", False, (255, 255, 255)) 
-        screen.blit(text, (screen.get_width()/2 - text.get_width()/2, screen.get_height()/2))
         replay.x = screen.get_width()/2 - replay.sprite.get_width()/2
         replay.y = screen.get_height()/2+replay.sprite.get_height()
         screen.blit(replay.sprite, (replay.x, replay.y))
@@ -54,9 +51,21 @@ while running:
         pygame.display.flip()
         continue
 
+    if player.health <= 0:
+        font = pygame.font.SysFont("Comic Sans", 100)
+        text = font.render("Game Over", False, (255, 255, 255)) 
+        screen.blit(text, (screen.get_width()/2 - text.get_width()/2, screen.get_height()/2))
+    elif len(enemies) == 0:
+        font = pygame.font.SysFont("Comic Sans", 100)
+        text = font.render("You Win! You defeated all the enemies!", False, (255, 255, 255)) 
+        screen.blit(text, (screen.get_width()/2 - text.get_width()/2, screen.get_height()/2))
+
     screen.fill("purple")
 
     player.move(dt, map.walls)
+
+    screen.blit(map.floors, (player.offset.x, player.offset.y))
+    screen.blit(map.walls, (player.offset.x, player.offset.y))
     
     for enemy in enemies:
         enemy.move(dt, player, map.walls)

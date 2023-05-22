@@ -51,7 +51,7 @@ class MapLoader:
         for y in range(0, len(self.maps[map]["Walls"])):
             for x in range(0, len(self.maps[map]["Walls"][y])):
                 x_pos = (x * 64) + x_offset
-                y_pos = (y * 64) + y_offset - 64
+                y_pos = (y * 64) + y_offset
                 if (y == 0 or y == 1) and (x == 14 or x == 15 or x == 16 or x == 17) and nearby_rooms[0]:
                     continue
                 if (y == len(self.maps[map]["Walls"]) - 1 or y == len(self.maps[map]["Walls"]) - 2) and (x == 14 or x == 15 or x == 16 or x == 17) and nearby_rooms[3]:
@@ -86,7 +86,7 @@ class MapDrawer:
 
         self.walls.fill([0, 0, 0, 0])
 
-        current_map = "Example Map"
+        current_map = "start"
 
         y_offset = 0
         for i in range(0, 25):
@@ -104,7 +104,13 @@ class MapDrawer:
                             nearby_rooms[rooms.index(r)] = True
                     except:
                         pass
+
+                if generator.map[i] == 3:
+                    current_map = "start"
                 self.enemies = loader.draw_map(current_map, self.floors, self.walls, self.enemies, x_offset+(5000 - (64 * 30 * 2)), y_offset+5000 - (64 * 18 * 2), nearby_rooms)
+                current_map = random.choice(list(loader.maps.keys()))
+                while current_map == "start":
+                    current_map = random.choice(list(loader.maps.keys()))
 
 
 class MapGenerator:

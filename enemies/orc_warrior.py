@@ -23,6 +23,7 @@ class OrcWarrior(Enemy):
                 ]
         self.animator.add_animation(attack_sprites, 10, "attack")
         self.attack_timer = -1
+        self.attacked = False
 
     def attack(self, player):
         distance = math.sqrt((player.position.y - self.y)**2 + (player.position.x - self.x)**2)
@@ -31,10 +32,14 @@ class OrcWarrior(Enemy):
                 self.attack_timer = pygame.time.get_ticks() + 2000
                 self.animator.set_animation("attack")
             if pygame.time.get_ticks() > self.attack_timer:
-                player.health -= 1
                 self.attack_timer = -1
+                self.attacked = False
+            if pygame.time.get_ticks() > self.attack_timer/2 and not self.attacked:
+                self.attacked = True
+                player.health -= 1
         else:
             self.attack_timer = -1
+            self.attacked = False
 
     def move(self, dt, player, walls):
         # TODO: Make attacks sinc up properly with the animation
