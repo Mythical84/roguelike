@@ -1,9 +1,12 @@
 # Roguelike
 
-### Description
-A very basic roguelike game
+| :exclamation:  This project is currently not being worked on   |
+|----------------------------------------------------------------|
 
-### Requirments
+### Description
+A basic roguelike game created for a computer science final project, to win kill all of the enemies on the map. 
+
+### Project Requirments
 
 - [x] art
 - [x] random room placement
@@ -12,7 +15,6 @@ A very basic roguelike game
 - [x] animations
 
 ### Optional Additions
-(Ranked in order of importance)
 - [x] Good player ui
 - [ ] More rooms
 - [ ] boss room
@@ -25,6 +27,7 @@ A very basic roguelike game
 they need to be to conserve memory
 - [ ] different characters
 - [ ] Use wave function collapse for variation in the rooms
+- [ ] Better animation system with events
 
 
 ## Credits
