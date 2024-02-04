@@ -1,8 +1,5 @@
 # Roguelike
 
-| :exclamation:  This project is currently not being worked on   |
-|----------------------------------------------------------------|
-
 ### Description
 A basic roguelike game created for a computer science final project, to win kill all of the enemies on the map. 
 
