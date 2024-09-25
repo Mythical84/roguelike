@@ -29,6 +29,6 @@ they need to be to conserve memory
 
 ## Credits
 Enemy and tile art thanks to [0x72](https://0x72.itch.io/dungeontileset-ii)  
-UI thanks to [0x72](https://0x72.itch.io/dungeonui)
+UI thanks to [0x72](https://0x72.itch.io/dungeonui)  
 Restart Button thanks to https://pixelartmaker.com/art/2f1d67196a2b469  
 Any math help is linked in the code
